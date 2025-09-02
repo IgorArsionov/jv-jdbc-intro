@@ -5,14 +5,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class MyConnection {
-    private static final String dataBass = "jdbc:mysql://s8.thehost.com.ua:3306/home";
-    private static final String name = "IgorArs";
-    private static final String pass = "123123Qw";
+    private static final String BASE = "jdbc:mysql://s8.thehost.com.ua:3306/home";
+    private static final String NAME = "IgorArs";
+    private static final String PASS = "123123Qw";
 
     public static Connection getConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            return DriverManager.getConnection(dataBass, name, pass);
+            return DriverManager.getConnection(BASE, NAME, PASS);
         } catch (SQLException e) {
             throw new RuntimeException("No connection to the database.", e);
         } catch (ClassNotFoundException e) {
