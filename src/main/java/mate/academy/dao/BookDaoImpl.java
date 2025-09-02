@@ -28,7 +28,8 @@ public class BookDaoImpl implements BookDao {
             int rows = statement.executeUpdate();
 
             if (rows < 1) {
-                throw new DataProcessingException("Expected to insert at leas one row, but was 0 rows.");
+                throw new DataProcessingException(
+                        "Expected to insert at leas one row, but was 0 rows.");
             }
 
             ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -96,7 +97,8 @@ public class BookDaoImpl implements BookDao {
             int rows = statement.executeUpdate();
 
             if (rows < 1) {
-                throw new DataProcessingException("Expected to update at leas one row, but was 0 rows.");
+                throw new DataProcessingException(
+                        "Expected to update at leas one row, but was 0 rows.");
             }
 
         } catch (SQLException e) {
