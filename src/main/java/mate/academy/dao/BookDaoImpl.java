@@ -39,14 +39,14 @@ public class BookDaoImpl implements BookDao {
             }
 
         } catch (SQLException e) {
-            throw new DataProcessingException("Create - Can not connect to database.", e);
+            throw new DataProcessingException("Can't save a book " + book, e);
         }
         return book;
     }
 
     @Override
     public Optional<Book> findById(Long id) {
-        String sql = "SELECT * FROM books WHERE id = ?";
+        String sql = "SELECT id, title, price FROM books WHERE id = ?";
         try (Connection connection = MyConnection.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setObject(1, id);
@@ -59,14 +59,14 @@ public class BookDaoImpl implements BookDao {
                 return Optional.of(book);
             }
         } catch (SQLException e) {
-            throw new DataProcessingException("Find by Id - Can not connect to database.", e);
+            throw new DataProcessingException("Can't get a book by id " + id, e);
         }
         return Optional.empty();
     }
 
     @Override
     public List<Book> findAll() {
-        String sql = "SELECT * FROM books";
+        String sql = "SELECT id, title, price FROM books";
         List<Book> books = new ArrayList<>();
         try (Connection connection = MyConnection.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql);
@@ -79,7 +79,7 @@ public class BookDaoImpl implements BookDao {
             }
 
         } catch (SQLException e) {
-            throw new DataProcessingException("Find All - Can not connect to database.", e);
+            throw new DataProcessingException("Can't get all books", e);
         }
         return books;
     }
@@ -102,7 +102,7 @@ public class BookDaoImpl implements BookDao {
             }
 
         } catch (SQLException e) {
-            throw new DataProcessingException("Update - Can not connect to database.", e);
+            throw new DataProcessingException("Can't update a book. " + book, e);
         }
         return book;
     }
@@ -117,7 +117,7 @@ public class BookDaoImpl implements BookDao {
             return rows > 0;
 
         } catch (SQLException e) {
-            throw new DataProcessingException("Delete by id - Can not connect to database.", e);
+            throw new DataProcessingException("Can't delete a book by id. " + id, e);
         }
     }
 
