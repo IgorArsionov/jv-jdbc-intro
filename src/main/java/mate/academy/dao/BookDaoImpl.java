@@ -1,5 +1,6 @@
 package mate.academy.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +28,7 @@ public class BookDaoImpl implements BookDao {
             int rows = statement.executeUpdate();
 
             if (rows < 1) {
-                throw new RuntimeException("Expected to insert at leas one row, but was 0 rows.");
+                throw new DataProcessingException("Expected to insert at leas one row, but was 0 rows.");
             }
 
             ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -50,10 +51,9 @@ public class BookDaoImpl implements BookDao {
             statement.setObject(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                Book book = new Book();
-                book.setId(resultSet.getLong("id"));
-                book.setTitle(resultSet.getString("title"));
-                book.setPrice(resultSet.getBigDecimal("price"));
+                Book book = createBook(resultSet.getObject("id", Long.class),
+                        resultSet.getString("title"),
+                        resultSet.getBigDecimal("price"));
 
                 return Optional.of(book);
             }
@@ -72,12 +72,9 @@ public class BookDaoImpl implements BookDao {
                 ResultSet resultSet = statement.executeQuery();) {
 
             while (resultSet.next()) {
-                Book book = new Book();
-                book.setId(resultSet.getLong("id"));
-                book.setTitle(resultSet.getString("title"));
-                book.setPrice(resultSet.getBigDecimal("price"));
-
-                books.add(book);
+                books.add(createBook(resultSet.getObject("id", Long.class),
+                        resultSet.getString("title"),
+                        resultSet.getBigDecimal("price")));
             }
 
         } catch (SQLException e) {
@@ -99,7 +96,7 @@ public class BookDaoImpl implements BookDao {
             int rows = statement.executeUpdate();
 
             if (rows < 1) {
-                throw new RuntimeException("Expected to update at leas one row, but was 0 rows.");
+                throw new DataProcessingException("Expected to update at leas one row, but was 0 rows.");
             }
 
         } catch (SQLException e) {
@@ -120,5 +117,14 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             throw new DataProcessingException("Delete by id - Can not connect to database.", e);
         }
+    }
+
+    private Book createBook(Long id, String title, BigDecimal bigDecimal) {
+        Book book = new Book();
+        book.setId(id);
+        book.setTitle(title);
+        book.setPrice(bigDecimal);
+
+        return book;
     }
 }
