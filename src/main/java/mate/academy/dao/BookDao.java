@@ -1,10 +1,9 @@
 package mate.academy.dao;
 
-import mate.academy.entity.Book;
-import mate.academy.lib.Dao;
-
 import java.util.List;
 import java.util.Optional;
+import mate.academy.entity.Book;
+import mate.academy.lib.Dao;
 
 @Dao
 public interface BookDao {
